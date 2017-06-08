@@ -7,11 +7,11 @@ Created on Wed Jun  7 16:25:52 2017
 
 import csv, json
 
-with open('actorfame_big.json', 'r') as file:
+with open('age_big.json', 'r') as file:
     actordata = json.load(file)
 
 with open('actorfame.csv', 'w', newline='') as csvfile:
     spamwriter = csv.writer(csvfile,quoting=csv.QUOTE_NONNUMERIC)
-    spamwriter.writerow(['Name', 'Birth Date', 'Country of Origin', 'First active year', 'Page creation year', 'Fame score'])
+    spamwriter.writerow(['Name', 'Age', 'CountryOfOrigin', 'FirstActiveYear', 'PageCreationYear', 'FameScore'])
     for actor in actordata:
-        spamwriter.writerow([actor['rdf-schema#label'].encode('utf-8'), actor['birthDate'], actor['stateOfOrigin_label'], actor['activeYearsStartYear'], actor['creationYear'], actor['fame']])
+        spamwriter.writerow([actor['rdf-schema#label'].encode('utf-8'), actor['age'], actor['stateOfOrigin_label'], actor['activeYearsStartYear'], actor['creationYear'], actor['fame']])
