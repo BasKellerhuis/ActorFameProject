@@ -6,11 +6,8 @@ Created on Tue Jun  6 14:30:41 2017
 """
 
 from urllib import parse, request
+from multiprocessing import Pool
 import json
-WikiIDs = []
-dictIDs={}
-with open('actors.json', 'r') as file:
-    elements = json.load(file)
 
 def request_page(page=1, params=None):
     '''Request a page of data from the UCDP database.'''
@@ -20,7 +17,7 @@ def request_page(page=1, params=None):
     req_params = params if params is not None else {
         'action': 'query',
         'prop': 'revisions',
-        'pageids': 1,
+        'pageids': page,
         'rvlimit': 1,
         'rvdir': 'newer',
         'format': 'json'
@@ -36,20 +33,22 @@ def request_page(page=1, params=None):
         response = json.loads(data) # parse the json from the response
 
     return response
-IDdict={}
-for element in elements:
-    print(element["wikiPageID"])
-        #for element in WikiIDs:
-        # Request some data from the online database
-    parameters = {
-        'action': 'query',
-        'prop': 'revisions',
-        'pageids': element["wikiPageID"],
-        'rvlimit': 1,
-        'rvdir': 'newer',
-        'format': 'json'
-    }
-    result = request_page(params=parameters)
-    IDdict[element["wikiPageID"]] = result
-with open('timestamps.json', 'w') as file: # open a file for writing
-    json.dump(IDdict, file, indent=4) # save the result as json in this file
+
+def pageidselect(element):
+    return element['wikiPageID']
+
+if __name__ == '__main__':
+    with open('actors_big.json', 'r') as file:
+        elements = json.load(file)
+
+    smallpool = Pool(processes=10)
+    pageids = smallpool.map(pageidselect, elements)
+    print("pageids selected")
+
+    bigpool = Pool(processes=100)
+    result = bigpool.map(request_page, pageids)
+
+    
+
+    with open('timestamps_big.json', 'w') as file: # open a file for writing
+        json.dump(result, file, indent=4) # save the result as json in this file
