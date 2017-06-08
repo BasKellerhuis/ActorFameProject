@@ -1,3 +1,7 @@
+#install.packages("ggplot2")
+#library(ggplot2)
+#library(lattice)
+
 fame <- read.csv("actorfame.csv")
 american <- c("United States", "America")
 british <- c("United Kingdom", "British", "English", "Britain", "England", "Ireland", "Irish", "Welsh", "Wales", "Scottish", "Scotland")
@@ -48,13 +52,7 @@ meanFameCorrected <- c(kidsMeanFame, youngMeanFame, adultMeanFame, middleMeanFam
 groupnames <- c('<16', '16-24', '25-39', '40-59', '60+')
 meanFameDataFrame <- data.frame(meanFameCorrected, groupnames)
 
-meanFameByAge <- table(meanFameDataFrame$groupnames, meanFameDataFrame$meanFameCorrected)
-barplot(meanFameByAge, main="Mean fame score per age group",
-        xlab="Fame score, lower is better", col=c("red", "yellow", "green", "blue", "violet"), ylim = c(-2,2),
-        legend = rownames(meanFameByAge), beside=TRUE)
 
-#install.packages("ggplot2")
-#library(ggplot2)
 label <- c("<16", "16-24", "25-39", "40-59", "60+")
 ggplot(meanFameDataFrame, aes(label, meanFameDataFrame$meanFameCorrected, fill=as.factor(meanFameDataFrame$groupnames))) +
 geom_bar(position="dodge", stat="summary", fun.y ="mean") + xlab("Age groups") + ylab("Mean difference in fame score") + ggtitle("Mean difference per age group")
@@ -63,3 +61,14 @@ regressionData <- subset(fame, fame$Age <90)
 xyplot( jitter(FameScore, amount = 0.5)~jitter(Age, amount = 0.5), data = regressionData, xlab = "Age", ylab = "Fame score", main = "Fame score vs Age in Actors")
 
 summary(lm( formula =FameScore~Age, data = regressionData))
+
+alphabetFirstHalf <- c("A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M")
+alphabetSecondHalf <- c("N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z")
+
+firstletterfirsthalf = fame[fame$FirstLetter %in% c("A", "M")]
+firstlettersecondhalf = fame[fame$FirstLetter %in% alphabetSecondHalf]
+
+FameByLetterFirstHalf <- table(firstletterfirsthalf$FirstLetter, firstletterfirsthalf$FameScore)
+barplot(FameByLetterFirstHalf, main="Number of actors with certain fame score per first letter of first name",
+        xlab="Fame score, lower is better", col=c("darkblue","red"),
+        legend = rownames(FameByLetterFirstHalf), beside=TRUE)
