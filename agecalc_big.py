@@ -12,6 +12,7 @@ i=0
 for actor in actordata:
     if actor['birthDate']== None or actor['birthDate']== '' or '- ' in actor['birthDate'] or ' -' in actor['birthDate']:
         i+=1
+        actor['age']= None
     elif '{' in actor['birthDate']: 
         actor['birthDate'] = (actor['birthDate'].split('|')[1][0:-1])
         actor['birthDate'] = (actor['birthDate'].split('-')[0])
@@ -19,6 +20,8 @@ for actor in actordata:
             actor['birthDate']=int(actor['birthDate'])
             age = 2017 - actor['birthDate']
             actor['age']= age
+        else:
+            actor['age']= None
    
     else:
         actor['birthDate'] = (actor['birthDate'].split('-')[0])
