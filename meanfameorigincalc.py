@@ -17,24 +17,30 @@ abroadfame=0
 abroadactors=0
 
 for actor in actorfame:
-    if actor['stateOfOrigin_label'] == None or actor['fame']==None:
+    if actor['fame']==None:
         i+=1
-    elif 'American' in actor['stateOfOrigin_label'] or 'United States' in actor['stateOfOrigin_label'] or 'America' in actor['rdf-schema#label']:
+    elif 'American' in actor['rdf-schema#label'] or 'American people' in actor['rdf-schema#label']:
         USactors+=1
         USfame+=actor['fame']
-        US= (USfame/USactors)
         actor['stateOfOrigin_label']='United States'
-        
-    elif 'United Kingdom' in actor['stateOfOrigin_label'] or 'Britain' in actor['stateOfOrigin_label'] or 'British' in actor['stateOfOrigin_label'] or 'British' in actor['rdf-schema#label'] or 'Scotland' in actor['stateOfOrigin_label'] or 'Scottish' in actor['rdf-schema#label'] or 'Scottish' in actor['stateOfOrigin_label'] or 'Ireland' in actor['stateOfOrigin_label'] or 'Irish' in actor['stateOfOrigin_label'] or 'Irish' in actor['rdf-schema#label']:
+    elif 'British'in actor['rdf-schema#label'] or 'Irish' in actor['rdf-schema#label'] or 'Scottish' in actor['rdf-schema#label'] or 'English' in actor['rdf-schema#label'] or 'British people'in actor['rdf-schema#label'] or 'English people'in actor['rdf-schema#label']:
         UKactors+=1
         UKfame+=actor['fame']
-        UK= (UKfame/UKactors)
         actor['stateOfOrigin_label']='United Kingdom'
-        
     else:
-        abroadactors+=1
-        abroadfame+=actor['fame']
-        abroad= (abroadfame/abroadactors)
-        
+        if actor['stateOfOrigin_label']==None:
+            i+=1
+        elif 'American' in actor['stateOfOrigin_label'] or 'United States' in actor['stateOfOrigin_label'] or 'America' in actor['stateOfOrigin_label'] or 'American people' in actor['stateOfOrigin_label']:
+            USactors+=1
+            USfame+=actor['fame']
+            actor['stateOfOrigin_label']='United States'
+        elif 'United Kingdom' in actor['stateOfOrigin_label'] or 'England' in actor['stateOfOrigin_label'] or 'Britain' in actor['stateOfOrigin_label'] or 'British' in actor['stateOfOrigin_label'] or 'Scotland' in actor['stateOfOrigin_label'] or 'Scottish' in actor['stateOfOrigin_label'] or 'Ireland' in actor['stateOfOrigin_label'] or 'Irish' in actor['stateOfOrigin_label'] or 'British people' in actor['stateOfOrigin_label'] or 'English people' in actor['stateOfOrigin_label']:
+            UKactors+=1
+            UKfame+=actor['fame']
+            actor['stateOfOrigin_label']='United Kingdom'
+        else:
+            abroadactors+=1
+            abroadfame+=actor['fame']
+
 with open('countryfame_big.json', 'w') as file:                        
     json.dump(actorfame, file, ensure_ascii=True)
